@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'SafeArray_Example' do
+  pod 'SafeArray', :path => '../'
+
+  target 'SafeArray_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
