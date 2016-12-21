@@ -26,7 +26,9 @@ public struct SafeArray<Element> {
     public init(withElements elements: [Element]? = nil) {
         guard let elements = elements else { return }
         
-        self.internalElements.append(contentsOf: elements)
+        dispatchQueue.sync {
+            self.internalElements.append(contentsOf: elements)
+        }
     }
 }
 
@@ -46,37 +48,53 @@ public extension SafeArray {
         }
     }
     
+    public mutating func reset(withElements elements: [Element]) {
+        
+        dispatchQueue.sync {
+            self.internalElements = elements
+        }
+    }
     
     /// Thread-safe appending of a single element
     ///
     /// - Parameter element: Element to append
     public mutating func append(element: Element) {
+        
         dispatchQueue.sync {
             internalElements.append(element)
         }
     }
     
-    
     /// Thread-safe appending of a collection of Elements
     ///
     /// - Parameter elements: Collection to append
     public mutating func append(contentsOf elements: [Element]) {
+        
         dispatchQueue.sync {
             self.internalElements.append(contentsOf: elements)
         }
     }
-    
     
     /// Map method which returns an Array containing elements creating by the supplied transform
     ///
     /// - Parameter transform: Transform closure
     /// - Returns: Array of elements created by the map method
     /// - Throws:
-    public mutating func map<T>(transform: (Element) throws -> T) rethrows -> [T] {
+    public mutating func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
         var results: [T] = []
         
         try dispatchQueue.sync {
             results = try self.internalElements.map(transform)
+        }
+        
+        return results
+    }
+    
+    public mutating func filter(_ isIncluded: (Element) throws -> Bool) rethrows -> [Element] {
+        var results: [Element] = []
+        
+        try dispatchQueue.sync {
+            results = try self.internalElements.filter(isIncluded)
         }
         
         return results
