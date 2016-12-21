@@ -14,16 +14,15 @@ class Tests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+    func testMap() {
+        var safeArray = SafeArray<String>()
+        
+        let elementsToAdd = ["Pete", "Maiya"]
+        
+        safeArray.append(contentsOf: elementsToAdd)
+        
+        let mappedArray = safeArray.map { "Hi"+$0 }
+        
+        XCTAssert(mappedArray == ["HiPete", "HiMaiya"])
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }

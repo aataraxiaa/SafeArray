@@ -1,0 +1,16 @@
+PODS:
+  - SafeArray (0.1.0)
+
+DEPENDENCIES:
+  - SafeArray (from `../`)
+
+EXTERNAL SOURCES:
+  SafeArray:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  SafeArray: d1db90d614ea95165f3248e7b2ac2fd773240d6e
+
+PODFILE CHECKSUM: a8dd21e3955ff89cd55fe2bc96f508dac33afba1
+
+COCOAPODS: 1.1.1

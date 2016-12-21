@@ -1,0 +1,6 @@
+framework module SafeArray {
+  umbrella header "SafeArray-umbrella.h"
+
+  export *
+  module * { export * }
+}
