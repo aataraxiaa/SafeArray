@@ -17,8 +17,8 @@
 public struct SafeArray<Element> {
     
     // MARK: - Properties 
-    fileprivate lazy var internalElements = Array<Element>()
-    fileprivate lazy var dispatchQueue: DispatchQueue = DispatchQueue(label: "SafeArray queue")
+    fileprivate var internalElements = Array<Element>()
+    fileprivate var dispatchQueue: DispatchQueue = DispatchQueue(label: "SafeArray queue")
     
     /// Initializer for the SafeArray type
     ///
@@ -41,13 +41,17 @@ public extension SafeArray {
             var elements: [Element] = []
             
             dispatchQueue.sync {
-                elements = internalElements
+                elements.append(contentsOf: internalElements)
             }
             
             return elements
         }
     }
     
+    
+    /// Resets the SafeArray. Removes all current elements, and adds all the specified elements
+    ///
+    /// - Parameter elements: Elements to add to SafeArray
     public mutating func reset(withElements elements: [Element]) {
         
         dispatchQueue.sync {
@@ -79,8 +83,9 @@ public extension SafeArray {
     ///
     /// - Parameter transform: Transform closure
     /// - Returns: Array of elements created by the map method
-    /// - Throws:
+    /// - Throws: Possible Throw
     public mutating func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
+        
         var results: [T] = []
         
         try dispatchQueue.sync {
@@ -90,7 +95,14 @@ public extension SafeArray {
         return results
     }
     
+    
+    /// Filter method which returns an Array containing elements which should be included
+    ///
+    /// - Parameter isIncluded: Closure used to determine if an element should be included in returned Array
+    /// - Returns: Array of filtered elements
+    /// - Throws: Possible Throw
     public mutating func filter(_ isIncluded: (Element) throws -> Bool) rethrows -> [Element] {
+        
         var results: [Element] = []
         
         try dispatchQueue.sync {
