@@ -8,7 +8,6 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-
 /*  
  SafeArray is attended to be used in place of a general Swift Array
  It provides thread-safe access to it's underlying Array collection.
@@ -34,10 +33,9 @@ public struct SafeArray<Element> {
 
 public extension SafeArray {
     
-    
     /// Thread-safe get access to the SafeArray's elements
     public var elements: [Element] {
-        mutating get {
+        get {
             var elements: [Element] = []
             
             dispatchQueue.sync {
@@ -62,7 +60,7 @@ public extension SafeArray {
     /// Thread-safe appending of a single element
     ///
     /// - Parameter element: Element to append
-    public mutating func append(element: Element) {
+    public mutating func append(_ element: Element) {
         
         dispatchQueue.sync {
             internalElements.append(element)
@@ -84,7 +82,9 @@ public extension SafeArray {
     /// - Parameter transform: Transform closure
     /// - Returns: Array of elements created by the map method
     /// - Throws: Possible Throw
-    public mutating func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
+    public func map<T>(_ transform: (Element) throws -> T) rethrows -> SafeArray<T> {
+        
+        var safeArray = SafeArray<T>()
         
         var results: [T] = []
         
@@ -92,7 +92,9 @@ public extension SafeArray {
             results = try self.internalElements.map(transform)
         }
         
-        return results
+        safeArray.append(contentsOf: results)
+        
+        return safeArray
     }
     
     
@@ -101,7 +103,9 @@ public extension SafeArray {
     /// - Parameter isIncluded: Closure used to determine if an element should be included in returned Array
     /// - Returns: Array of filtered elements
     /// - Throws: Possible Throw
-    public mutating func filter(_ isIncluded: (Element) throws -> Bool) rethrows -> [Element] {
+    public func filter(_ isIncluded: (Element) throws -> Bool) rethrows -> SafeArray<Element> {
+        
+        var safeArray = SafeArray<Element>()
         
         var results: [Element] = []
         
@@ -109,6 +113,8 @@ public extension SafeArray {
             results = try self.internalElements.filter(isIncluded)
         }
         
-        return results
+        safeArray.append(contentsOf: results)
+        
+        return safeArray
     }
 }

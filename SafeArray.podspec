@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SafeArray'
-  s.version          = '0.1.0'
-  s.summary          = 'SafeArray is attended to be used in place of a general Swift Array. It provides thread-safe access to its underlying Array collection.'
+  s.version          = '1.0'
+  s.summary          = 'SafeArray is a wrapper on a Swift Array which provides thread-safe access to the Array elements.'
 
   s.description      = <<-DESC
   SafeArray is attended to be used in place of a general Swift Array
