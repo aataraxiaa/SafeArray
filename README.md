@@ -7,15 +7,38 @@
 
 # SafeArray
 
-SafeArray is a wrapper on a Swift Array which provides thread-safe access to the Array elements.
+SafeArray is a wrapper on a Swift Array which provides thread-safe access to it's underlying Array elements.
 
-SafeArray is attended to be used in place of a general Swift Array
-It provides thread-safe access to it's underlying Array collection.
 Thread-safe versions Array/Collection methods such as append, map are provided.
 
-## Example
+## Examples
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+### Creating a SafeArray
+
+```
+let safeArray = SafeArray<Int>(withElements: [1,2,3]])
+```
+
+### Appending elements
+
+```
+var safeArray = SafeArray<Int>(withElements: [1,2,3]])
+safeArray.append(contentsOf: [4,5])
+```
+
+### Map
+
+```
+let safeArray = SafeArray<String>(withElements: ["world1","world2"])        
+let mappedArray = safeArray.map { "Hello "+$0 }
+```
+
+### Filter
+
+```
+let safeArray = SafeArray<Int>(withElements: [1,2,3])
+let filteredArray = safeArray.filter { $0 != 1 }
+```
 
 ## Requirements
 
